@@ -28,5 +28,16 @@
             "run_at": "document_idle"
         }
     ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "content-injected.js"
+            ],
+            "matches": [
+                "*://y.byu.edu/*",
+                "*://aim.byu.edu/*"
+            ]
+        }
+    ],
     "permissions": []
 }
