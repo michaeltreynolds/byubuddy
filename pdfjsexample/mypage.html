@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="module">
+
+        async function handleFile(event) {
+            alert("Really starting")
+            // const file = 'addcodes.pdf';
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+
+            
+            // const pdf = await pdfjsLib.getDocument(file).promise;
+
+            let fullText = "";
+            const page = await pdf.getPage(1);
+            const textContent = await page.getTextContent();
+            const text = textContent.items.map(item => item.str).join(" ");
+
+            alert("really done")
+            alert(text)
+        }
+        alert("starting1")
+      // This is where you would configure the worker source
+      import { GlobalWorkerOptions } from 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.269/build/pdf.mjs';
+      GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.269/build/pdf.worker.mjs';
+
+       import * as pdfjsLib from 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.269/build/pdf.mjs';
+
+       
+    //   handleFile()
+      // Your PDF.js rendering logic would follow here
+      // For example, loading a PDF and rendering it to a canvas
+    //   r res = GlobalWorkerOptions.getDocument('file:///C:/Users/mtr26/Desktop/addcodes.pdf')
+    //   alert(pdfjsLib.getDocument('file:///C:/Users/mtr26/Desktop/addcodes.pdf'))
+        window.handleFile = handleFile
+        alert("done")
+    </script>
+    <script>
+
+
+    </script>
+</head>
+<body>
+    <input type="file" accept="application/pdf" onchange="handleFile(event)">
+</body>
+</html>
