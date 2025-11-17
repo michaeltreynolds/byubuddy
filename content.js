@@ -1,4 +1,4 @@
-alert("STARTING")
+console.log("STARTING")
 year_term = '20261'
 year_term_int = parseInt(year_term)
 // content-script.js
@@ -60,11 +60,30 @@ async function fetchInstructorSchedule(brownie, year_term_int) {
   }).filter(Boolean);
 
   console.table(classes);
-  alert("DDDDONE")
+  console.log("DDDDONE")
   return classes;
 }
-alert(parent.window.brownie)
+console.log(parent.window.brownie)
 // Example usage:
 window.setTimeout(()=>fetchInstructorSchedule(brownie, year_term_int), 1000);
 
-alert("DONE@")
+async function getAddCodePdf(curriculum_id, title_code, section_number) {
+  console.log("Get PDF");
+  const response = await fetch("https://y.byu.edu/ry/ae/prod/class_schedule/cgi/printRoll.cgi", {
+    headers: {
+      "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+      "content-type": "application/x-www-form-urlencoded",
+    },
+    method: "POST",
+    credentials: "include",
+    //"c=&e=%40loadToken&%26year_term%3D20261%26credit_institution%3DBYU+PROVO%26curriculum_id%3D14034%26title_code%3D001%26section_number%3D001%26",
+    body: `&year_term=${year_term_int}&credit_institution=BYU PROVO&curriculum_id=${curriculum_id}&title_code=${title_code}&section_number=${section_number}&brownie=${brownie}`
+    //body: `brownie=${brownie}&c=&e=&iid=223204922&year_term=${year_term_int}&parms=0&current=*&curriculum_id=&title_code=&my_section_number=&gradeSubmissionData=&lms=`
+  });
+  console.log("DONE PDF")
+}
+
+window.setTimeout(()=>getAddCodePdf("14034", "001", "001"), 1000);
+
+
+console.log("DONE@")
