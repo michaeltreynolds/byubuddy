@@ -80,6 +80,7 @@ async function getAddCodePdf(curriculum_id, title_code, section_number) {
     body: `&year_term=${year_term_int}&credit_institution=BYU PROVO&curriculum_id=${curriculum_id}&title_code=${title_code}&section_number=${section_number}&brownie=${brownie}`
     //body: `brownie=${brownie}&c=&e=&iid=223204922&year_term=${year_term_int}&parms=0&current=*&curriculum_id=&title_code=&my_section_number=&gradeSubmissionData=&lms=`
   });
+  console.log(response)
   console.log("DONE PDF")
 }
 
