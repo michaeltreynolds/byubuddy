@@ -82,9 +82,37 @@ async function getAddCodePdf(curriculum_id, title_code, section_number) {
   });
   console.log(response)
   console.log("DONE PDF")
+
 }
 
 window.setTimeout(()=>getAddCodePdf("14034", "001", "001"), 1000);
 
 
 console.log("DONE@")
+
+async function extractPdfTextNoLib(pdfBuffer) {
+  const pdf = new TextDecoder().decode(pdfBuffer);
+
+  // 1. Find /Contents X 0 R reference
+  const ref = pdf.match(/\/Contents\s+(\d+)\s+0\s+R/);
+  if (!ref) return "";
+  const objNum = ref[1];
+
+  // 2. Extract stream bytes from the object
+  const objRegex = new RegExp(
+    objNum + "\\s+0\\s+obj[\\s\\S]*?stream[\\r\\n]+([\\s\\S]*?)endstream"
+  );
+  const m = pdf.match(objRegex);
+  if (!m) return "";
+
+  const rawStream = m[1];
+
+  // Convert to binary bytes
+  const bytes = new Uint8Array([...rawStream].map(c => c.charCodeAt(0)));
+
+  // 3. Inflate using built-in deflate
+  const inflated = await inflateRaw(bytes);
+
+  // 4. Extract literal strings used by Tj/TJ
+  return extractTextFromPdfStream(inflated);
+}
